@@ -1,0 +1,28 @@
+config:
+  runTime: "Python"
+  version: ""
+  framework: "Django"
+  installCommand: "pip install -r requirements.txt"
+  buildCommand: " "
+  buildDir: "./"
+  runCommand: "python manage.py runserver"
+  icon: "myapp/images/icon.svg"
+  screenshot: "myapp/images/django.png"
+ports:
+  - protocol: "HTTPS"
+    targetProtocol: "HTTP"
+    listeningPort: "443"
+    targetPort: "8000"
+    public: true
+    path: "/"
+    isAuth: false
+    login: ""
+    password: ""
+exposedPorts:
+  - protocol: "HTTP"
+    hostPort: "8000"
+    containerPort: "8000"
+    interface: "172.17.0.1"
+webUI:
+  - url: "https://[CI_CD_DOMAIN]"
+    label: "Website"    
