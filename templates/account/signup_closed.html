@@ -1,0 +1,14 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "إغلاق التسجيل" %}{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="text-center">
+        <h1 class="display-4">{% trans "إغلاق التسجيل" %}</h1>
+        <p class="lead mt-4">{% trans "نأسف، ولكن التسجيل مغلق حالياً." %}</p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "account/base.html" %} 
+{% load i18n %} 
+
+{% block head_title %}
+    {% trans "تسجيل الخروج" %}
+{% endblock %} 
+
+{% block content %}
+<style type="text/css">
+  .logout-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+  }
+  
+  .logout-box {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+  }
+  
+  .logout-box h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  .logout-box p {
+    font-size: 16px;
+    color: #6c757d;
+    margin-bottom: 30px;
+  }
+
+  .logout-box button {
+    width: 100%;
+  }
+</style>
+
+<div class="logout-container">
+  <div class="logout-box">
+    <h1>{% trans "تسجيل الخروج" %}</h1>
+    <p>{% trans 'هل أنت متأكد أنك تريد تسجيل الخروج؟' %}</p>
+    <form method="post" action="{% url 'account_logout' %}">
+      {% csrf_token %} 
+      {% if redirect_field_value %}
+        <input
+          type="hidden"
+          name="{{ redirect_field_name }}"
+          value="{{ redirect_field_value }}"
+        />
+      {% endif %}
+      <button type="submit" class="btn btn-danger">
+        {% trans 'تسجيل الخروج' %}
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}

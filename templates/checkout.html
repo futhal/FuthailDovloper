@@ -1,0 +1,134 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+
+   <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+      .form-control {
+        display: block;
+        width: 100%;
+        height: calc(1.5em + .75rem + 2px);
+        padding: .375rem .75rem;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da !important;
+        border-radius: .25rem;
+        transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+      }
+      body {
+          direction: rtl;
+          text-align: right;
+      }
+    </style>
+  
+ 
+    <div class="container">
+      <div class="py-5 text-center">
+        <img class="d-block mx-auto mb-4" src="/docs/4.3/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+        <h2>نموذج الدفع</h2>
+        <p class="lead">أدناه نموذج دفع مثالي مبني بالكامل باستخدام عناصر التحكم في النموذج من Bootstrap. يحتوي كل حقل مطلوب على حالة تحقق يمكن تفعيلها عند محاولة إرسال النموذج دون إكماله.</p>
+      </div>
+
+      <div class="row">
+        <div class="col-md-8 order-md-1 card">
+          <h4 class="mb-3" style="margin-top: 26px;">عنوان الفواتير</h4>
+          <form method="POST" class="needs-validation" novalidate>
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="address">العنوان</label>
+              {{ form.street_address }}
+            </div>
+
+            <div class="mb-3">
+              <label for="address2">العنوان 2 <span class="text-muted">(اختياري)</span></label>
+              {{ form.apartment_address }}
+            </div>
+
+            <div class="row">
+              <div class="col-md-5 mb-3">
+                <label for="country">الدولة</label>
+                {{ form.country }}
+                <div class="invalid-feedback">
+                  الرجاء اختيار دولة صالحة.
+                </div>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="state">المدينة</label>
+                <select class="custom-select d-block w-100" id="state" required>
+                  <option value="">اختر...</option>
+                  <option>كاليفورنيا</option>
+                  <option>يانغون</option>
+                </select>
+                <div class="invalid-feedback">
+                  الرجاء توفير مدينة صالحة.
+                </div>
+              </div>
+              <div class="col-md-3 mb-3">
+                <label for="zip">الرمز البريدي</label>
+                {{ form.zip }}
+                <div class="invalid-feedback">
+                  الرمز البريدي مطلوب.
+                </div>
+              </div>
+            </div>
+            <hr class="mb-4">
+            <div class="custom-control custom-checkbox">
+              <input {% if form.same_shipping_address.value %}checked{% endif %} type="checkbox" class="custom-control-input" id="same_shipping_address">
+              <label class="custom-control-label" for="same_shipping_address">عنوان الشحن هو نفسه عنوان الفواتير</label>
+            </div>
+            <div class="custom-control custom-checkbox">
+              <input {% if form.save_info.value %}checked{% endif %} type="checkbox" class="custom-control-input" id="save-info">
+              <label class="custom-control-label" for="save-info">احفظ هذه المعلومات للمرات القادمة</label>
+            </div>
+            <hr class="mb-4">
+
+            <h4 class="mb-3">الدفع</h4>
+
+            <div class="d-block my-3">
+              {% for value, name in form.fields.payment_option.choices %}
+              <div class="custom-control custom-radio">
+                <input id="{{ name }}" name="payment_option" value="{{ value }}" type="radio" class="custom-control-input" required>
+                <label class="custom-control-label" for="{{name}}">{{ name }}</label>
+              </div>
+              {% endfor %}
+            </div>
+        
+            <hr class="mb-4">
+            <button class="btn btn-primary btn-lg btn-block" type="submit">الاستمرار للدفع</button>
+          </form>
+        </div>
+
+        {% include "order_snippet.html" %}
+
+      </div>
+
+      <footer class="my-5 pt-5 text-muted text-center text-small">
+        <p class="mb-1">&copy; 2017-2019 اسم الشركة</p>
+        <ul class="list-inline">
+          <li class="list-inline-item"><a href="#">الخصوصية</a></li>
+          <li class="list-inline-item"><a href="#">الشروط</a></li>
+          <li class="list-inline-item"><a href="#">الدعم</a></li>
+        </ul>
+      </footer>
+    </div>
+{% endblock content %}

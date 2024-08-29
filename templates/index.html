@@ -1,0 +1,239 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load category_template_tags %}
+{% load slide_template_tags %}
+{% block content %}
+
+<!-- CSS Styles -->
+<style>
+
+    /* General styles for section titles */
+    .category-title {
+        text-align: right;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 20px;
+        border-right: 5px solid #007bff;
+        padding-right: 10px;
+    }
+
+    /* Block2 Labels */
+    .block2-labelpromotion::before,
+    .block2-labelsale::before,
+    .block2-labelnew::before {
+        z-index: 100;
+        font-family: Montserrat-Regular;
+        font-size: 12px;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 50px;
+        height: 22px;
+        border-radius: 11px;
+        position: absolute;
+        top: 12px;
+        left: 12px;
+    }
+
+    .block2-labelsale::before {
+        background-color: white;
+        color: #000;
+        content: 'تخفيض';
+    }
+
+    .block2-labelnew::before {
+        background-color: #007bff;
+        content: 'جديد';
+    }
+
+    .block2-labelpromotion::before {
+        background-color: #000;
+        content: 'عرض خاص';
+        width: 70px;
+    }
+
+    /* General button styles */
+    .btn-dark {
+        color: #fff;
+        background-color: #000;
+        border-color: #000;
+    }
+
+    .btn-outline-dark {
+        color: #000;
+        border-color: #000;
+    }
+
+    /* Custom Styles */
+    .hov1 {
+        background-color: white !important;
+        color: black !important;
+    }
+
+    .newproduct {
+        margin-bottom: 2px;
+        padding-bottom: 2px;
+    }
+
+    .banner2 {
+        background-color: #fff;
+        margin: 0 1rem;
+        padding-bottom: 0 !important;
+    }
+
+    .ban_img {
+        height: 680px;
+        width: 100%;
+    }
+
+    .ban5_img {
+        height: 580px;
+        width: 100%;
+    }
+
+    .btn-light {
+        color: #000;
+        background-color: #fff;
+        border-color: #fff;
+        border-radius: 20px;
+    }
+
+    .wrap-btn-slide1 a:hover {
+        background-color: whitesmoke;
+        color: #000 !important;
+        opacity: 0.7;
+    }
+
+    .slide1 button:hover {
+        background-color: white !important;
+        color: black;
+    }
+
+    /* Product card styles */
+    .product-thumb {
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #fff;
+        transition: box-shadow 0.3s ease-in-out;
+        margin-bottom: 30px;
+    }
+
+    .product-thumb:hover {
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-thumb img {
+        width: 100%;
+        height: auto;
+        border-radius: 5px;
+    }
+
+    .caption h4 {
+        font-size: 1rem;
+        margin-top: 10px;
+        margin-bottom: 5px;
+        color: #333;
+        text-align: center;
+    }
+
+    .caption .text-center {
+        text-align: center;
+    }
+
+    .button-group {
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .button-group a {
+        display: inline-block;
+        padding: 10px 15px;
+        background-color: #007bff;
+        color: #fff;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+    .button-group a:hover {
+        background-color: #0056b3;
+        color: #fff;
+    }
+
+    /* Align products to the right */
+    .row.products-row {
+        display: flex;
+        flex-direction: row-reverse;
+        flex-wrap: wrap;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .product-layout {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+    }
+</style>
+
+<!-- Slide 1 -->
+<section class="slide1">
+    <div class="wrap-slick1">
+        <div class="slick1">
+            {% slides %}
+        </div>
+    </div>
+</section>
+
+<!-- New Products Section -->
+<section class="newproduct p-t-45 p-b-105">
+    <div class="container">
+        {% for cat in category_list %}
+        <div class="row">
+            <div id="content" class="col-sm-12">
+                <h3 class="category-title">{{ cat.title }}</h3>
+                <div class="row products-row">
+                    {% for item in object_list_item %}
+                    {% if cat.id == item.category_id %}
+                    <div class="product-layout col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                        <div class="product-thumb transition prdct-loop-thmb-bst">
+                            <div class="image">
+                                <a href="{{ item.get_absolute_url }}">
+                                    <img src="{{ item.image.url }}" alt="{{ item.title }}" class="img-responsive">
+                                </a>
+                            </div>
+                            <div class="caption">
+                                <h4><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></h4>
+                                <h4>{{ item.description_short }}</h4>
+                                <div class="text-center">
+                                    {% if item.discount_price %}
+                                    <span class="block2-newprice m-text6 p-r-5" style="font-size: 15px;">
+                                        ﷼{{ item.discount_price }}
+                                    </span>
+                                    <span class="block2-oldprice m-text7 p-r-5" style="font-size: 15px;">
+                                        ﷼{{ item.price }}
+                                    </span>
+                                    {% else %}
+                                    <span class="m-text17">
+                                        ﷼{{ item.price }}
+                                    </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="button-group">
+                                <a href="{{ item.get_add_to_cart_url }}">أضف إلى العربة</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock content %}

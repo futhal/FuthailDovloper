@@ -1,0 +1,424 @@
+{% load static %}
+{% load cart_template_tags %}
+{% load category_template_tags %}
+
+<style>
+    .topbar {
+        background-color: #444444; /* لون الخلفية للبار العلوي */
+        color: white !important;
+        direction: rtl;
+        padding: 10px 0;
+    }
+
+    .topbar-social a, .topbar-email a {
+        color: white;
+    }
+
+    .topbar a:hover {
+        color: #ddd; /* لون التظليل عند مرور الماوس */
+    }
+
+    .wrap_header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #f8f8f8; /* لون الخلفية */
+        padding: 0px 16px;
+        flex-wrap: wrap; /* لضمان أن العناصر تلتف في حال كانت الشاشة صغيرة */
+		height: 65px !important;
+		border-bottom: solid 4px #00c887;
+    }
+	.header1 {
+		height: 95px !important;
+	}
+    .wrap_menu {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+    }
+
+    .wrap_menu nav.menu {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .wrap_menu nav.menu ul {
+        display: flex;
+        align-items: center;
+        list-style: none;
+        flex-wrap: wrap; /* لضمان أن العناصر تلتف في حال كانت الشاشة صغيرة */
+    }
+
+    .wrap_menu nav.menu ul li {
+        margin-left: 20px;
+    }
+
+    .wrap_menu nav.menu ul li a {
+        color: #333;
+        text-decoration: none;
+        padding: 6px 9px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+    .wrap_menu nav.menu ul li a:hover {
+        background-color: #00c581; /* لون الخلفية عند مرور الماوس */
+        color: white;
+    }
+
+    .header-wrapicon2 {
+        position: relative;
+        margin-left: 15px;
+    }
+
+    .header-icons-noti {
+        background-color: #00c581;
+        border-radius: 50%;
+        padding: 2px 6px;
+        color: white;
+        font-size: 12px;
+        position: absolute;
+        top: -10px;
+        right: -10px;
+    }
+
+    .header-cart-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+    }
+
+    .header-cart-buttons a {
+        background-color: #00c581;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+    }
+
+    .header-cart-buttons a:hover {
+        background-color: #00c581;
+    }
+
+    /* تصميم شريط البحث */
+    .search-bar {
+        display: flex;
+        align-items: center;
+        margin-top: 5px; /* مسافة من الأعلى للمساعدة في ضبط التنسيق */
+    }
+
+    .search-bar input[type="text"] {
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px 0 0 5px;
+        width: 254px;
+    }
+
+    .search-bar button {
+        padding: 5px;
+        background-color: #00c581;
+        color: white;
+        border: none;
+        border-radius: 0 5px 5px 0;
+        cursor: pointer;
+    }
+
+    .search-bar button:hover {
+        background-color: #00c581;
+    }
+
+
+
+	.topbar-social-item {
+		background-color: #00c581 !important;
+		border-radius: 3px !important;
+		padding: 4px !important;
+		margin-left: 3px;
+		}
+
+		#topbarr {
+			height: 45px;
+			background-color: #f5f5f5;
+			position: relative;
+			display: -webkit-box;
+			display: -webkit-flex;
+			display: -moz-box;
+			display: -ms-flexbox;
+			display: flex;
+			justify-content: flex-start !important;
+			align-items: center;
+		}
+
+.topbar-auth {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px; /* مسافة بين أزرار التسجيل */
+}
+
+</style>
+
+<!-- رأس الصفحة -->
+<header class="header1" dir="rtl">
+    <!-- رأس الصفحة على أجهزة الحاسوب -->
+    <div class="container-menu-header">
+        <div class="topbar">
+            <div class="topbar-social">
+                <a href="#" class="topbar-social-item fab fa-facebook"></a>
+                <a href="#" class="topbar-social-item fab fa-instagram"></a>
+                <a href="#" class="topbar-social-item fab fa-pinterest-p"></a>
+                <a href="#" class="topbar-social-item fab fa-twitter"></a>
+                <a href="#" class="topbar-social-item fab fa-youtube"></a>
+            </div>
+
+          
+           
+               
+	
+				
+			
+              {% if request.user.is_authenticated %} 
+			  <div class="topbar-child2" >
+				<div class="header-wrapicon2">
+					<!-- <a href="{% url 'core:order-summary' %}">
+						<img src="{% static 'images/icons/icon-header-02.png' %}" class="header-icon1 js-show-header-dropdown" alt="ICON">
+						
+					</a> -->
+		
+					<a href="{% url 'core:order-summary' %}" class="header-icon-link">
+						<i class="fas fa-shopping-cart header-icon1" style="font-size: 18px;color: white;font-weight: bold;"></i>
+						<span class="header-icons-noti">{{ request.user|cart_item_count }}</span>
+					</a>
+				</div>
+		
+			<a class="topbar-social-item" href="{% url 'account_logout' %}" style="font-size: 11px;color: white;font-weight: bold;">تسجيل الخروج</a>
+		
+		</div>
+			  {% else %} 
+			  <div class="topbar-child2" >
+					
+				
+					
+					<a class="topbar-social-item" href="{% url 'account_login' %}" style="font-size: 11px;color: white;font-weight: bold;">دخـــول</a>
+                    <a class="topbar-social-item" href="{% url 'account_signup' %}" style="font-size: 11px;color: white;font-weight: bold;">إنشاء حساب</a>
+					
+				</div>
+			  {% endif %}
+         	
+				<!-- <div class="topbar-language rs1-select2">
+                    <select class="selection-1" name="time">
+                        <option value=""> ريال سعودي</option>
+                        <option value="">دولار أمريكي</option>
+                    </select>
+                </div> -->
+        </div>
+  <!-- Collapse -->
+
+
+        <div class="wrap_header">
+            <!-- الشعار -->
+            <a href="/" class="">
+                <p style="color: black;float: left !important;"><b style="font-size: 22px;">Futh</b>Edu</p>
+            </a>
+
+			<style>
+				/* General menu styling */
+
+
+			</style>
+
+            <!-- القائمة -->
+            <div class="wrap_menu">
+                <nav class="menu">
+                    <ul class="main_menu">
+                        <li><a href="/">الرئيسية</a></li>
+                        <li><a href="/shop/">المتجر</a></li>
+
+                        <!-- {% categories %} -->
+						{% categories 2 %}
+						
+                       
+                    </ul>
+                </nav>
+            </div>
+			
+            <!-- شريط البحث -->
+            <div class="search-bar">
+                <button type="submit"><i class="fa fa-search"></i></button>
+                <input type="text" placeholder="بحث" />
+            </div>
+        </div>
+    </div>
+	<!-- Header Mobile -->
+	<div class="wrap_header_mobile" dir="ltr">
+		<!-- Logo moblie -->
+		<a href="index.html" class="logo-mobile">
+			<img src="{% static 'images/icons/logo.png' %}" alt="IMG-LOGO">
+		</a>
+
+		<!-- Button show menu -->
+		<div class="btn-show-menu">
+			<!-- Header Icon mobile -->
+			<div class="header-icons-mobile">
+				<a href="#" class="header-wrapicon1 dis-block">
+					<img src="{% static 'images/icons/icon-header-01.png' %}" class="header-icon1" alt="ICON">
+				</a>
+
+				<span class="linedivide2"></span>
+
+				<div class="header-wrapicon2">
+					<img src="{% static 'images/icons/icon-header-02.png' %}" class="header-icon1 js-show-header-dropdown" alt="ICON">
+					<span class="header-icons-noti">0</span>
+
+					<!-- Header cart noti -->
+					<div class="header-cart header-dropdown">
+						<ul class="header-cart-wrapitem">
+							<li class="header-cart-item">
+								<div class="header-cart-item-img">
+									<img src="{% static 'images/item-cart-01.jpg' %}" alt="IMG">
+								</div>
+
+								<div class="header-cart-item-txt">
+									<a href="#" class="header-cart-item-name">
+										White Shirt With Pleat Detail Back
+									</a>
+
+									<span class="header-cart-item-info">
+										1 x $19.00
+									</span>
+								</div>
+							</li>
+
+							<li class="header-cart-item">
+								<div class="header-cart-item-img">
+									<img src="{% static 'images/item-cart-02.jpg' %}" alt="IMG">
+								</div>
+
+								<div class="header-cart-item-txt">
+									<a href="#" class="header-cart-item-name">
+										Converse All Star Hi Black Canvas
+									</a>
+
+									<span class="header-cart-item-info">
+										1 x $39.00
+									</span>
+								</div>
+							</li>
+
+							<li class="header-cart-item">
+								<div class="header-cart-item-img">
+									<img src="{% static 'images/item-cart-03.jpg' %}" alt="IMG">
+								</div>
+
+								<div class="header-cart-item-txt">
+									<a href="#" class="header-cart-item-name">
+										Nixon Porter Leather Watch In Tan
+									</a>
+
+									<span class="header-cart-item-info">
+										1 x $17.00
+									</span>
+								</div>
+							</li>
+						</ul>
+
+						<div class="header-cart-total">
+							Total: $75.00
+						</div>
+
+						<div class="header-cart-buttons">
+							<div class="header-cart-wrapbtn">
+								<!-- Button -->
+								<a href="cart.html" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
+									View Cart
+								</a>
+							</div>
+
+							<div class="header-cart-wrapbtn">
+								<!-- Button -->
+								<a href="#" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
+									Check Out
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="btn-show-menu-mobile hamburger hamburger--squeeze">
+				<span class="hamburger-box">
+					<span class="hamburger-inner"></span>
+				</span>
+			</div>
+		</div>
+	</div>
+
+	<!-- Menu Mobile -->
+	<div class="wrap-side-menu" dir="ltr">
+		<nav class="side-menu">
+			<ul class="main-menu">
+				<li class="item-topbar-mobile p-l-20 p-t-8 p-b-8">
+					<span class="topbar-child1">
+						Free shipping for standard order over $100
+					</span>
+				</li>
+
+				<li class="item-topbar-mobile p-l-20 p-t-8 p-b-8">
+					<div class="topbar-child2-mobile">
+						<span class="topbar-email">
+							fashe@example.com
+						</span>
+
+						<div class="topbar-language rs1-select2">
+							<select class="selection-1" name="time">
+								<option>USD</option>
+								<option>EUR</option>
+							</select>
+						</div>
+					</div>
+				</li>
+
+				<li class="item-topbar-mobile p-l-10">
+					<div class="topbar-social-mobile">
+						<a href="#" class="topbar-social-item fa fa-facebook"></a>
+						<a href="#" class="topbar-social-item fa fa-instagram"></a>
+						<a href="#" class="topbar-social-item fa fa-pinterest-p"></a>
+						<a href="#" class="topbar-social-item fa fa-snapchat-ghost"></a>
+						<a href="#" class="topbar-social-item fa fa-youtube-play"></a>
+					</div>
+				</li>
+
+				<li class="item-menu-mobile">
+					<a href="/">Home</a>
+				</li>
+
+				<li class="item-menu-mobile">
+					<a href="/shop">Shop</a>
+				</li>
+
+				{% categories_mobile %}
+
+				{% if request.user.is_authenticated %}
+				<li class="item-menu-mobile">
+					<a href="{% url 'core:order-summary' %}">Cart<span class="badge badge-dark">{{ request.user|cart_item_count }}</span></a>
+				</li>
+				<li class="item-menu-mobile">
+					<a href="{% url 'account_logout' %}">Logout</a>
+				</li>
+				{% else %}
+				<li class="item-menu-mobile">
+					<a href="#">Login</a>
+					<ul class="sub-menu">
+						<li><a href="{% url 'account_login' %}">Login</a></li>
+						<li><a href="{% url 'account_signup' %}">SignUp</a></li>
+					</ul>
+					<i class="arrow-main-menu fa fa-angle-right" aria-hidden="true"></i>
+				</li>
+				{% endif %}
+
+			</ul>
+		</nav>
+	</div>
+</header>
+
+

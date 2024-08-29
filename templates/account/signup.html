@@ -1,0 +1,79 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}{% trans "إنشاء حساب جديد" %}{% endblock %}
+
+{% block content %}
+<style>
+    .signup-container {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #f8f9fa;
+    }
+
+    .signup-box {
+        background-color: #fff;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 500px;
+        text-align: center;
+    }
+
+    .signup-box h1 {
+        margin-bottom: 30px;
+        font-size: 28px;
+        font-weight: 700;
+        color: #343a40;
+    }
+
+    .signup-box .form-group {
+        text-align: left;
+    }
+
+    .signup-box .btn-primary {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+    }
+
+    .already-account {
+        margin-top: 20px;
+        color: #6c757d;
+    }
+
+    .already-account a {
+        color: #007bff;
+        text-decoration: none;
+    }
+
+    .already-account a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="signup-container">
+    <div class="signup-box">
+        <h1>{% trans "إنشاء حساب جديد" %}</h1>
+
+        <p class="already-account">
+            {% blocktrans %}هل لديك حساب بالفعل؟ <a href="{{ login_url }}">سجل الدخول</a>.{% endblocktrans %}
+        </p>
+
+        <form id="signup_form" method="post" action="{% url 'account_signup' %}">
+            {% csrf_token %}
+            {{ form|crispy }}
+
+            {% if redirect_field_value %}
+                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+            {% endif %}
+            <button type="submit" class="btn btn-primary">{% trans "إنشاء حساب" %} &raquo;</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

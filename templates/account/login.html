@@ -1,0 +1,197 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+{% load account socialaccount %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}{% trans "تسجيل الدخول" %}{% endblock %}
+
+{% block content %}
+<style>
+    .login-container {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #f8f9fa;
+    }
+
+    .login-box {
+        background-color: #fff;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 500px;
+        text-align: center;
+    }
+
+    .login-box h1 {
+        margin-bottom: 30px;
+        font-size: 28px;
+        font-weight: 700;
+        color: #343a40;
+    }
+
+    .login-box .form-group {
+        text-align: left;
+    }
+
+    .login-box .btn-primary {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+    }
+
+    .login-box .forgot-password {
+        display: block;
+        margin-top: 15px;
+        color: #6c757d;
+        text-decoration: none;
+    }
+
+    .login-box .forgot-password:hover {
+        text-decoration: underline;
+    }
+
+    .social-login {
+        margin-top: 20px;
+    }
+
+    .social-login .btn {
+        width: 100%;
+        margin-bottom: 10px;
+        text-align: left;
+    }
+
+    .signup-link {
+        margin-top: 20px;
+        color: #6c757d;
+    }
+
+    .signup-link a {
+        color: #007bff;
+        text-decoration: none;
+    }
+
+    .signup-link a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="login-container">
+    <div class="login-box">
+        <h1>{% trans "تسجيل الدخول" %}</h1>
+
+        {% if user.is_authenticated %}
+        {% include "account/snippets/already_logged_in.html" %}
+        {% else %}
+        {% get_providers as socialaccount_providers %}
+
+        {% if socialaccount_providers %}
+        <div class="social-login">
+            <p>{% trans "قم بتسجيل الدخول باستخدام إحدى الحسابات الاجتماعية التالية:" %}</p>
+            {% for provider in socialaccount_providers %}
+            <a href="#" class="btn btn-outline-dark" data-toggle="modal" data-target="#confirmModal" data-provider="{{ provider.id }}">
+                <i class="fab fa-{{ provider.id }} fa-fw"></i> {% trans provider.name %}
+            </a>
+            <a href="#" class="btn btn-outline-dark">
+                <i class="fab fa-facebook fa-fw"></i> {% trans "Facebook" %}
+            </a>
+            {% endfor %}
+
+        </div>
+
+        <p>{% trans "أو قم بتسجيل الدخول باستخدام بريدك الإلكتروني:" %}</p>
+        {% endif %}
+
+        <form method="POST" action="{% url 'account_login' %}">
+            {% csrf_token %}
+            {{ form|crispy }}
+
+            {% if redirect_field_value %}
+            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+            {% endif %}
+
+            <button type="submit" class="btn btn-primary">{% trans "تسجيل الدخول" %}</button>
+        </form>
+
+        <a href="{% url 'account_reset_password' %}" class="forgot-password">{% trans "هل نسيت كلمة المرور؟" %}</a>
+
+        <div class="signup-link">
+            <p>{% trans "ليس لديك حساب؟" %} <a href="{% url 'account_signup' %}">{% trans "سجل الآن" %}</a></p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+<!-- Modal HTML -->
+<!-- Modal HTML -->
+<!-- Modal HTML -->
+ <!-- reCAPTCHA Script -->
+
+<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmModalLabel">{% trans "تأكيد" %}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>{% trans "هل أنت متأكد من أنك تريد تسجيل الدخول باستخدام الحساب الاجتماعي المحدد؟" %}</p>
+                <p id="providerName"></p>
+                <!-- reCAPTCHA -->
+                
+            </div>
+            <div class="modal-footer">
+                <form id="confirmForm" method="post" class="text-center" >
+                    {% csrf_token %}
+                    <input type="hidden" name="provider" id="providerField">
+                    <input type="hidden" name="g-recaptcha-response" id="recaptchaResponse">
+                    <button type="submit" class="btn btn-primary mt-3" onclick=" onClick()">{% trans "تأكيد" %}</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "إلغاء" %}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://www.google.com/recaptcha/enterprise.js?render=6LeFPDEqAAAAAGLmdnJmWXZ6SEKKSsEV_02p8v6I"></script>
+<!-- <script src="https://www.google.com/recaptcha/api.js?render=6LeFPDEqAAAAAGLmdnJmWXZ6SEKKSsEV_02p8v6I"></script> -->
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        $('#confirmModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var provider = button.data('provider'); // Extract info from data-* attributes
+            var providerName = button.text().trim();
+    
+            var modal = $(this);
+            modal.find('.modal-body #providerName').text("You are about to sign in using: " + providerName);
+            modal.find('#providerField').val(provider);
+            modal.find('#confirmForm').attr('action', '{% url "google_login" %}');
+        });
+    
+        $('#confirmForm').on('submit', function (event) {
+            var response = grecaptcha.getResponse();
+            if (response.length === 0) {
+                alert('{% trans "يرجى التحقق من أنك لست روبوتاً." %}');
+                event.preventDefault();
+            } else {
+                $('#recaptchaResponse').val(response);
+            }
+        });
+    });
+</script>
+<!-- Replace the variables below. -->
+<script>
+    function onClick(e) {
+      e.preventDefault();
+      grecaptcha.enterprise.ready(async () => {
+        const token = await grecaptcha.enterprise.execute('6LeFPDEqAAAAAGLmdnJmWXZ6SEKKSsEV_02p8v6I', {action: 'core/create_assessment/'});
+      });
+    }
+  </script>
+  
+{% endblock %}
