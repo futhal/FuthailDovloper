@@ -103,15 +103,18 @@ SITE_ID = 1
 LOGIN_REDIRECT_URL = '/'
 
 # Provider specific settings
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
-        # For each OAuth based provider, either add a ``SocialApp``
-        # (``socialaccount`` app) containing the required client
-        # credentials, or list them here:
         'APP': {
-            'client_id': '968661108545-7fj1ggt8hcgu21ma2jqksu3uvvil3jnt.apps.googleusercontent.com',
-            'secret': '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',
-            'key': ''
+            'client_id': os.getenv('GOOGLE_CLIENT_ID'),
+            'secret': os.getenv('GOOGLE_CLIENT_SECRET'),
+            'key': os.getenv('GOOGLE_CLIENT_KEY')
         }
     }
 }
