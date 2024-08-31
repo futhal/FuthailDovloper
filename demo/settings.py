@@ -1,10 +1,16 @@
 import os
+import environ
 
+# Initialize environment variables
+env = environ.Env(
+    DEBUG=(bool, False)
+)
+# Take environment variables from .env file
 ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
-
-DEBUG = True
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SECRET_KEY = '-05sgp9!deq=q1nltm@^^2cc+v29i(tyybv3v2t77qi66czazj'
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))  # تأكد من هذا السطر
+DEBUG = env('DEBUG')
+SECRET_KEY = env('SECRET_KEY')
 ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
@@ -65,8 +71,8 @@ USE_TZ = True
 # static files (CSS, JS, Image)
 
 # settings.py
-RECAPTCHA_SECRET_KEY = '6LeFPDEqAAAAALkTpC46C183DjfG7mvS98YxbGGu'
-RECAPTCHA_SITE_KEY = '6LeFPDEqAAAAAGLmdnJmWXZ6SEKKSsEV_02p8v6I'
+RECAPTCHA_SECRET_KEY = env('RECAPTCHA_SECRET_KEY')
+RECAPTCHA_SITE_KEY = env('RECAPTCHA_SITE_KEY')
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static_in_env')]
@@ -105,12 +111,9 @@ LOGIN_REDIRECT_URL = '/'
 # Provider specific settings
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
-        # For each OAuth based provider, either add a ``SocialApp``
-        # (``socialaccount`` app) containing the required client
-        # credentials, or list them here:
         'APP': {
-            'client_id': '968661108545-7fj1ggt8hcgu21ma2jqksu3uvvil3jnt.apps.googleusercontent.com',
-            'secret': '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',
+            'client_id': env('GOOGLE_CLIENT_ID'),
+            'secret': env('GOOGLE_SECRET'),
             'key': ''
         }
     }
@@ -120,5 +123,6 @@ SOCIALACCOUNT_PROVIDERS = {
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-STRIPE_PUBLIC_KEY = 'pk_test_51OYbKlIKQgN3yvJC1KlDzGoCUre5geN7ubWLQVV6vQnVd0DVXA0UhnzsZIZvP2r0cL2vViINfK9bi8be1rb6LOdE00OyERFxk7'
-STRIPE_SECRET_KEY = 'sk_test_51OYbKlIKQgN3yvJCWA6xkbORw77gTtQhl6sYHa4FWDBTuz5n2E1gr5NcwMEJmiqHoPwLgKgTHJ6lwe8QVzPEqzNO00TfLEDHSI'
+# Stripe keys
+STRIPE_PUBLIC_KEY = env('STRIPE_PUBLIC_KEY')
+STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY')
