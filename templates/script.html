@@ -80,3 +80,93 @@
 </script>
 
 <script src="{% static 'js/main.js' %}"></script>
+
+{% block extra_scripts %}
+<script>
+	$(document).ready( function() {
+		var menu = document.querySelector('.main_menu');
+		var dropdownContent = document.querySelector('.dropdown-content');
+		var dropdownButton = document.querySelector('.dropdown');
+	
+		function checkMenuItems() {
+			var screenWidth = window.innerWidth; // الحصول على عرض الشاشة الحالي
+			if (screenWidth > 992) { // تحقق فقط إذا كان العرض أكبر من 992 بكسل
+				 // تفريغ محتوى القائمة المنسدلة في كل تحقق
+				dropdownButton.style.display = 'none'; // إخفاء زر القائمة المنسدلة في البداية
+				
+				var totalWidth = 0;
+				var menuWidth = menu.clientWidth; // عرض القائمة
+				
+				Array.from(menu.children).forEach(function(item) {
+					item.style.display = 'inline-block'; // عرض العنصر بشكل افتراضي
+					totalWidth += item.offsetWidth;
+          //console.log(totalWidth)
+          //console.log(menuWidth)
+					if (totalWidth > menuWidth) {
+            // console.log(item)
+            var clonedItem = item.cloneNode(true);
+						dropdownContent.appendChild(clonedItem); // نقل العنصر إلى القائمة المنسدلة
+						item.style.display = 'none'; // إخفاء العنصر من القائمة الأساسية
+						// menu.removeChild(item); // نقل العنصر إلى القائمة المنسدلة
+						dropdownButton.style.display = 'block'; // عرض زر القائمة المنسدلة
+						// console.log(dropdownButton)
+					}
+          
+					else{
+            
+            console.log(dropdownContent.children);
+            console.log(dropdownContent.children.length);
+            
+            var totalWidth_d = 0; 
+            Array.from(dropdownContent.children).forEach(function(item_d) {
+                console.log('dss');
+                console.log(item_d);
+              //item_d.style.display = 'inline-block'; // عرض العنصر بشكل افتراضي
+					    totalWidth_d += item_d.offsetWidth;
+              if(totalWidth_d < menuWidth){
+                var clonedItem_d = item.cloneNode(true);
+                menu.appendChild(clonedItem_d); // نقل العنصر إلى القائمة المنسدلة
+                item_d.style.display = 'none'; // إخفاء العنصر من القائمة الأساسية
+                // menu.removeChild(item); // نقل العنصر إلى القائمة المنسدلة
+                //dropdownButton.style.display = 'block'; // عرض زر القائمة المنسدلة
+              }
+              else{
+                console.log('d');
+              }
+            })
+            // menu.appendChild(item); // نقل العنصر إلى القائمة المنسدلة
+						//item.style.display = 'block'; // إخفاء العنصر من القائمة الأساسية
+            //dropdownContent.removeChild(item); // نقل العنصر إلى القائمة المنسدلة
+            // console.log('dddd');
+            // dropdownButton.style.display = 'none'; // عرض زر القائمة المنسدلة
+            
+            
+			
+					}
+				});
+	
+				
+	
+			} else {
+				
+	
+				dropdownButton.style.display = 'none'; // إخفاء زر القائمة المنسدلة إذا كان العرض أقل من أو يساوي 992 بكسل
+			}
+		}
+	
+		// استدعاء الوظيفة عند تحميل الصفحة
+		checkMenuItems();
+	
+		// استدعاء الوظيفة عند تغيير حجم النافذة
+		window.addEventListener('resize', checkMenuItems);
+	
+		// إضافة حدث لعرض وإخفاء القائمة المنسدلة
+		document.querySelector('.dropbtn').addEventListener('click', function() {
+			dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
+		});
+	});
+
+	
+	</script>
+
+{% endblock extra_scripts %}

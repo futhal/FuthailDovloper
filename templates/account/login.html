@@ -77,6 +77,12 @@
     .signup-link a:hover {
         text-decoration: underline;
     }
+    .topbar {
+        background-color: #fff !important; /* لون الخلفية للبار العلوي */
+        color: white !important;
+        direction: rtl;
+        padding: 10px 0;
+    }
 </style>
 
 <div class="login-container">
@@ -87,33 +93,43 @@
         {% include "account/snippets/already_logged_in.html" %}
         {% else %}
         {% get_providers as socialaccount_providers %}
+        <div class="topbar">
+            <div class="topbar-child1">
 
+                <div class="g-recaptcha" data-sitekey="6LeZ9DIqAAAAAI78HSwTQo51YBHgYfQe2DUUhKuk" data-callback="onRecaptchaSuccess"></div>
+            </div>
+        </div>
         {% if socialaccount_providers %}
+      
         <div class="social-login">
             <p>{% trans "قم بتسجيل الدخول باستخدام إحدى الحسابات الاجتماعية التالية:" %}</p>
             {% for provider in socialaccount_providers %}
-            <a href="#" class="btn btn-outline-dark" data-toggle="modal" data-target="#confirmModal" data-provider="{{ provider.id }}">
+            <a href="javascript:void(0);" id="{{provider.name}}" class="btn btn-outline-dark social-login-btn" data-provider="{{ provider.id }}" >
                 <i class="fab fa-{{ provider.id }} fa-fw"></i> {% trans provider.name %}
             </a>
+            {% endfor %}
+            {% for provider in socialaccount_providers %}
             <a href="#" class="btn btn-outline-dark">
                 <i class="fab fa-facebook fa-fw"></i> {% trans "Facebook" %}
             </a>
             {% endfor %}
 
         </div>
-
+        
         <p>{% trans "أو قم بتسجيل الدخول باستخدام بريدك الإلكتروني:" %}</p>
         {% endif %}
 
         <form method="POST" action="{% url 'account_login' %}">
             {% csrf_token %}
             {{ form|crispy }}
-
+        
             {% if redirect_field_value %}
             <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
             {% endif %}
-
-            <button type="submit" class="btn btn-primary">{% trans "تسجيل الدخول" %}</button>
+        
+            <!-- reCAPTCHA -->
+        
+            <button type="submit" class="btn btn-primary" id="loginButton" disabled>{% trans "تسجيل الدخول" %}</button>
         </form>
 
         <a href="{% url 'account_reset_password' %}" class="forgot-password">{% trans "هل نسيت كلمة المرور؟" %}</a>
@@ -129,69 +145,104 @@
 <!-- Modal HTML -->
  <!-- reCAPTCHA Script -->
 
-<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="confirmModalLabel">{% trans "تأكيد" %}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>{% trans "هل أنت متأكد من أنك تريد تسجيل الدخول باستخدام الحساب الاجتماعي المحدد؟" %}</p>
-                <p id="providerName"></p>
-                <!-- reCAPTCHA -->
-                
-            </div>
-            <div class="modal-footer">
-                <form id="confirmForm" method="post" class="text-center" >
-                    {% csrf_token %}
-                    <input type="hidden" name="provider" id="providerField">
-                    <input type="hidden" name="g-recaptcha-response" id="recaptchaResponse">
-                    <button type="submit" class="btn btn-primary mt-3" onclick=" onClick()">{% trans "تأكيد" %}</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "إلغاء" %}</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<script src="https://www.google.com/recaptcha/enterprise.js?render=6LeFPDEqAAAAAGLmdnJmWXZ6SEKKSsEV_02p8v6I"></script>
-<!-- <script src="https://www.google.com/recaptcha/api.js?render=6LeFPDEqAAAAAGLmdnJmWXZ6SEKKSsEV_02p8v6I"></script> -->
 
-
+<script src="https://www.google.com/recaptcha/api.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        $('#confirmModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget); // Button that triggered the modal
-            var provider = button.data('provider'); // Extract info from data-* attributes
-            var providerName = button.text().trim();
     
-            var modal = $(this);
-            modal.find('.modal-body #providerName').text("You are about to sign in using: " + providerName);
-            modal.find('#providerField').val(provider);
-            modal.find('#confirmForm').attr('action', '{% url "google_login" %}');
+    function onRecaptchaSuccess(token) {
+        // Enable the login button when reCAPTCHA is successfully completed
+        document.getElementById('loginButton').disabled = false;
+        var socialButtons = document.querySelectorAll('.social-login-btn');
+        socialButtons.forEach(function(button) {
+            button.classList.remove('disabled');
         });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var recaptchaResponse = document.getElementById('g-recaptcha-response');
+        var socialButtons = document.querySelectorAll('.social-login-btn');
+        socialButtons.forEach(function(button) {
+            button.classList.add('disabled');
+        });
+        if (recaptchaResponse && recaptchaResponse.value !== "") {
+            // If reCAPTCHA is already validated, enable the submit button
+            document.getElementById('loginButton').disabled = false;
+            socialButtons.forEach(function(button) {
+                button.classList.remove('disabled');
+            });
+        }
+        {% for provider in socialaccount_providers %}
     
-        $('#confirmForm').on('submit', function (event) {
-            var response = grecaptcha.getResponse();
-            if (response.length === 0) {
-                alert('{% trans "يرجى التحقق من أنك لست روبوتاً." %}');
+    
+        
+        // Handle social login buttons
+        socialButtons.forEach(function(button) {
+            button.addEventListener('click', function(event) {
                 event.preventDefault();
-            } else {
-                $('#recaptchaResponse').val(response);
-            }
+                
+                var providerLoginUrl = "{% provider_login_url provider.id %}"
+    
+                // إنشاء نموذج POST ديناميكيًا
+                var form = document.createElement('form');
+                form.method = 'POST';
+                form.action = providerLoginUrl;
+    
+                // إضافة csrfmiddlewaretoken إلى النموذج
+                var csrfInput = document.createElement('input');
+                csrfInput.type = 'hidden';
+                csrfInput.name = 'csrfmiddlewaretoken';
+                csrfInput.value = '{{ csrf_token }}';
+    
+                form.appendChild(csrfInput);
+                
+                // إضافة النموذج إلى الجسم وتقديمه
+                document.body.appendChild(form);
+                form.submit();
+            });
         });
     });
-</script>
-<!-- Replace the variables below. -->
-<script>
-    function onClick(e) {
-      e.preventDefault();
-      grecaptcha.enterprise.ready(async () => {
-        const token = await grecaptcha.enterprise.execute('6LeFPDEqAAAAAGLmdnJmWXZ6SEKKSsEV_02p8v6I', {action: 'core/create_assessment/'});
-      });
+        
+    {% endfor %}
+    
+
+    function submitSocialLogin(provider) {
+        var recaptchaResponse = grecaptcha.getResponse();
+        if (recaptchaResponse.length === 0) {
+            alert('{% trans "يرجى التحقق من أنك لست روبوتاً." %}');
+            return false;
+        }
+
+        // Append recaptcha response and provider to form
+       
+        //var form = document.createElement('form');
+        //form.method = 'POST';
+        //form.action = "{% url 'core:social_login_view' %}";
+
+        // إضافة CSRF token
+        //var csrfInput = document.createElement('input');
+        //csrfInput.type = 'hidden';
+        //csrfInput.name = 'csrfmiddlewaretoken';
+        //csrfInput.value = '{{ csrf_token }}';
+
+        // إضافة حقل المزود (provider) و reCAPTCHA response
+        //var providerInput = document.createElement('input');
+        //providerInput.type = 'hidden';
+        //providerInput.name = 'provider';
+        //providerInput.value = provider;
+
+        //var recaptchaInput = document.createElement('input');
+        //recaptchaInput.type = 'hidden';
+        //recaptchaInput.name = 'g-recaptcha-response';
+        //recaptchaInput.value = recaptchaResponse;
+
+        //form.appendChild(csrfInput);
+        //form.appendChild(providerInput);
+        //form.appendChild(recaptchaInput);
+
+        //document.body.appendChild(form);
+        //form.submit();
     }
-  </script>
+</script>
+
   
 {% endblock %}

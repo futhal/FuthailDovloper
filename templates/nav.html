@@ -3,6 +3,50 @@
 {% load category_template_tags %}
 
 <style>
+	@media (min-width: 993px) {
+	/* إخفاء العناصر المزعجة على الشاشات الصغيرة */
+.hide-on-small-screen {
+    display: inline-block;
+}
+
+/* تنسيق زر الثلاث نقاط */
+.dropdown {
+    position: relative;
+    display: none; /* إخفاء الزر في البداية */
+}
+
+.dropbtn {
+    background-color: #00c581;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+/* تنسيق القائمة المنسدلة */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 300px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+
     .topbar {
         background-color: #444444; /* لون الخلفية للبار العلوي */
         color: white !important;
@@ -50,14 +94,14 @@
         flex-wrap: wrap; /* لضمان أن العناصر تلتف في حال كانت الشاشة صغيرة */
     }
 
-    .wrap_menu nav.menu ul li {
+    /* .wrap_menu nav.menu ul li {
         margin-left: 20px;
-    }
+    } */
 
     .wrap_menu nav.menu ul li a {
         color: #333;
         text-decoration: none;
-        padding: 6px 9px;
+        /* padding: 6px 9px; */
         border-radius: 5px;
         transition: background-color 0.3s ease;
     }
@@ -155,6 +199,7 @@
     justify-content: flex-end;
     gap: 10px; /* مسافة بين أزرار التسجيل */
 }
+}
 
 </style>
 
@@ -235,10 +280,14 @@
                         <li><a href="/shop/">المتجر</a></li>
 
                         <!-- {% categories %} -->
-						{% categories 2 %}
+						{% categories %}
 						
                        
                     </ul>
+					<div class="dropdown">
+						<button class="dropbtn">&#x22EE;</button>
+						<div class="dropdown-content"></div>
+					</div>
                 </nav>
             </div>
 			
@@ -252,8 +301,11 @@
 	<!-- Header Mobile -->
 	<div class="wrap_header_mobile" dir="ltr">
 		<!-- Logo moblie -->
-		<a href="index.html" class="logo-mobile">
+		<!-- <a href="index.html" class="logo-mobile">
 			<img src="{% static 'images/icons/logo.png' %}" alt="IMG-LOGO">
+		</a> -->
+		<a href="/" class="logo-mobile">
+			<p style="color: black;float: left !important;"><b style="font-size: 22px;">Futh</b>Edu</p>
 		</a>
 
 		<!-- Button show menu -->
@@ -356,44 +408,13 @@
 	<!-- Menu Mobile -->
 	<div class="wrap-side-menu" dir="ltr">
 		<nav class="side-menu">
-			<ul class="main-menu">
-				<li class="item-topbar-mobile p-l-20 p-t-8 p-b-8">
-					<span class="topbar-child1">
-						Free shipping for standard order over $100
-					</span>
-				</li>
-
-				<li class="item-topbar-mobile p-l-20 p-t-8 p-b-8">
-					<div class="topbar-child2-mobile">
-						<span class="topbar-email">
-							fashe@example.com
-						</span>
-
-						<div class="topbar-language rs1-select2">
-							<select class="selection-1" name="time">
-								<option>USD</option>
-								<option>EUR</option>
-							</select>
-						</div>
-					</div>
-				</li>
-
-				<li class="item-topbar-mobile p-l-10">
-					<div class="topbar-social-mobile">
-						<a href="#" class="topbar-social-item fa fa-facebook"></a>
-						<a href="#" class="topbar-social-item fa fa-instagram"></a>
-						<a href="#" class="topbar-social-item fa fa-pinterest-p"></a>
-						<a href="#" class="topbar-social-item fa fa-snapchat-ghost"></a>
-						<a href="#" class="topbar-social-item fa fa-youtube-play"></a>
-					</div>
+			<ul class="main-menu" style="text-align: center !important;">
+				<li class="item-menu-mobile">
+					<a href="/">الرئيسية</a>
 				</li>
 
 				<li class="item-menu-mobile">
-					<a href="/">Home</a>
-				</li>
-
-				<li class="item-menu-mobile">
-					<a href="/shop">Shop</a>
+					<a href="/shop">المتجر</a>
 				</li>
 
 				{% categories_mobile %}
@@ -403,14 +424,14 @@
 					<a href="{% url 'core:order-summary' %}">Cart<span class="badge badge-dark">{{ request.user|cart_item_count }}</span></a>
 				</li>
 				<li class="item-menu-mobile">
-					<a href="{% url 'account_logout' %}">Logout</a>
+					<a href="{% url 'account_logout' %}">تسجيل الخروج</a>
 				</li>
 				{% else %}
 				<li class="item-menu-mobile">
-					<a href="#">Login</a>
+					<a href="#">دخـــول</a>
 					<ul class="sub-menu">
-						<li><a href="{% url 'account_login' %}">Login</a></li>
-						<li><a href="{% url 'account_signup' %}">SignUp</a></li>
+						<li><a href="{% url 'account_login' %}">تسجيل الدخول</a></li>
+						<li><a href="{% url 'account_signup' %}">إنشاء حساب</a></li>
 					</ul>
 					<i class="arrow-main-menu fa fa-angle-right" aria-hidden="true"></i>
 				</li>
@@ -420,5 +441,3 @@
 		</nav>
 	</div>
 </header>
-
-

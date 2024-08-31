@@ -1,6 +1,6 @@
 from django.urls import path
 
-from core.recapycha import  create_assessment
+from core.recapycha import  create_assessment,social_login_view
 from .views import (
     ItemDetailView,
     HomeView,
@@ -13,7 +13,7 @@ from .views import (
     PaymentView,
     AddCouponView,
     RequestRefundView,
-    CategoryView
+    CategoryView,
 )
 
 app_name = 'core'
@@ -32,5 +32,6 @@ urlpatterns = [
          name='remove-single-item-from-cart'),
     path('payment/<payment_option>/', PaymentView.as_view(), name='payment'),
     path('request-refund/', RequestRefundView.as_view(), name='request-refund'),
-    path('create_assessment/', create_assessment, name='create_assessment')
+    path('create_assessment/', create_assessment, name='create_assessment'),
+    path('social_login_view/', social_login_view, name='social_login_view'),
 ]

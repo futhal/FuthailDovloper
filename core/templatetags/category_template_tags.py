@@ -6,38 +6,38 @@ from core.models import Category
 register = template.Library()
 
 
-# @register.simple_tag
-# def categories():
-#     items = Category.objects.filter(is_active=True).order_by('title')
-#     items_li = ""
-#     for i in items:
-#         items_li += """<li><a href="/category/{}">{}</a></li>""".format(i.slug, i.title)
-#     return mark_safe(items_li)
-
 @register.simple_tag
-def categories(max_visible=2):
+def categories():
     items = Category.objects.filter(is_active=True).order_by('title')
-    
-    visible_items = items[:max_visible]
-    hidden_items = items[max_visible:]
-
     items_li = ""
-    # Add visible items to the main menu
-    for i in visible_items:
+    for i in items:
         items_li += """<li><a href="/category/{}">{}</a></li>""".format(i.slug, i.title)
-    
-    # Add hidden items to the dropdown menu
-    if hidden_items.exists():
-        items_li += """<li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" >
-                        
-                       </a>
-                       <ul class="dropdown-menu" >"""
-        for i in hidden_items:
-            items_li += """<li class="dropdown-item"><a href="/category/{}">{}</a></li>""".format(i.slug, i.title)
-        items_li += "</ul></li>"
-
     return mark_safe(items_li)
+
+# @register.simple_tag
+# def categories(max_visible=2):
+#     items = Category.objects.filter(is_active=True).order_by('title')
+    
+#     visible_items = items[:max_visible]
+#     hidden_items = items[max_visible:]
+
+#     items_li = ""
+#     # Add visible items to the main menu
+#     for i in visible_items:
+#         items_li += """<li><a href="/category/{}">{}</a></li>""".format(i.slug, i.title)
+    
+#     # Add hidden items to the dropdown menu
+#     if hidden_items.exists():
+#         items_li += """<li class="nav-item dropdown">
+#                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" >
+                        
+#                        </a>
+#                        <ul class="dropdown-menu" >"""
+#         for i in hidden_items:
+#             items_li += """<li class="dropdown-item"><a href="/category/{}">{}</a></li>""".format(i.slug, i.title)
+#         items_li += "</ul></li>"
+
+#     return mark_safe(items_li)
 
 @register.simple_tag
 def categories_mobile():
