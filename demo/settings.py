@@ -114,7 +114,7 @@ SOCIALACCOUNT_PROVIDERS = {
         'APP': {
             'client_id': env('GOOGLE_CLIENT_ID'),
             'secret': env('GOOGLE_SECRET'),
-            'key': ''
+            'key': os.getenv('GOOGLE_CLIENT_KEY')
         }
     }
 }
