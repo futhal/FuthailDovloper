@@ -11,7 +11,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))  # تأكد من هذا السطر
 DEBUG = env('DEBUG')
 SECRET_KEY = env('SECRET_KEY')
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["futhaildovloper-u20800.vm.elestio.app","127.0.0.1:8000"]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
