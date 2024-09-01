@@ -3,7 +3,7 @@ config:
   version: ""
   framework: "Django"
   installCommand: "pip install -r requirements.txt"
-  buildCommand: " "
+  buildCommand: "python manage.py makemigrations && python manage.py migrate"
   buildDir: "./"
   runCommand: "python manage.py runserver"
   icon: "myapp/images/icon.svg"
