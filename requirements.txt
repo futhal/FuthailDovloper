@@ -19,7 +19,7 @@ defusedxml
 dill                              
 distlib                              
 Django                              
-ango-allauth                              
+django-allauth                           
 django-appconf                              
 django-countries                              
 django-crispy-forms                              
