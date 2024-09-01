@@ -79,3 +79,4 @@ virtualenv
 virtualenvwrapper-win                              
 wrapt                              
 zope.interface                              
+django-environ
