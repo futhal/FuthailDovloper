@@ -23,7 +23,7 @@ django-allauth
 django-appconf                              
 django-countries                              
 django-crispy-forms                              
-ango-tinymce-lite                              
+django-tinymce-lite                        
 filelock                              
 google-api-core                              
 google-api-python-client                              
@@ -38,7 +38,7 @@ grpcio-status
 httplib2                              
 hyperlink                              
 idna                              
-cremental                              
+incremental                              
 isort                              
 jsmin                              
 lazy-object-proxy                              
@@ -54,7 +54,7 @@ pyasn1
 pyasn1_modules                              
 pycodestyle                              
 pycparser                              
-yHamcrest                              
+PyHamcrest                              
 PyJWT                              
 pylint                              
 pyparsing                              
@@ -63,10 +63,10 @@ pytz
 requests                              
 requests-oauthlib                              
 rsa                              
-tuptools                              
+setuptools                              
 six                              
 soupsieve                              
-lparse                              
+sqlparse                              
 stripe                              
 tomlkit                              
 txaio                              
