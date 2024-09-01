@@ -9,9 +9,9 @@ env = environ.Env(
 ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))  # تأكد من هذا السطر
-DEBUG = env('DEBUG')
-SECRET_KEY = env('SECRET_KEY')
-ALLOWED_HOSTS = ["futhaildovloper-u20800.vm.elestio.app","127.0.0.1:8000"]
+DEBUG = True
+SECRET_KEY = 'django-insecure-945@25v7%l2b68n$rtu^fzjf(h0q(i4qo8f8xhdcf#i05&&2k0'
+ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
